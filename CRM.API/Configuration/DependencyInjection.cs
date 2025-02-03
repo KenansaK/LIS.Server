@@ -22,6 +22,7 @@ using Kernal.Contracts;
 using Persistence.Implementation;
 using CRM.Application.Requests.Access;
 using Kernel.Contract;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CRM.API.Configuration
 {
@@ -100,6 +101,9 @@ namespace CRM.API.Configuration
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddSingleton<IHttpContext, SharedKernel.HttpContext>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            //services
+            //    .AddFluentEmail(configuration["Email:SenderEmail"], configuration["Email:Sender"])
+            //    .AddSmtpSender(configuration["Email:Host"], configuration.GetValue<int>("Email:Port"));
 
             return services;
         }

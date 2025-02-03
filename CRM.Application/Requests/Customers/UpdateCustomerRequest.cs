@@ -34,7 +34,7 @@ public class UpdateCustomerRequestHandler(Dispatcher dispatcher) : IRequestHandl
         customer.BillingExternalCode = request.Model.BillingExternalCode;
         customer.ExternalCode = request.Model.ExternalCode;
         customer.StoreBarcodePrefix = request.Model.StoreBarcodePrefix;
-        // customer.Logo = request.Model.Logo;
+        customer.LogoBase64 = request.Model.LogoBase64;
 
         await dispatcher.DispatchAsync(new UpdateCustomerCommand { Customer = customer });
 

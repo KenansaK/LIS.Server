@@ -1,4 +1,5 @@
 ﻿using CRM.Domain.Auth;
+using FluentEmail.Core;
 using Kernal.Contracts;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -47,5 +48,6 @@ public class SignUpRequestHandler : IRequestHandler<SignUpRequest, object>
 
         };
     }
+
 }
 

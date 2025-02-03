@@ -14,4 +14,5 @@ public class Customer : BaseEntity
     public string ExternalCode { get; set; }
     public string StoreBarcodePrefix { get; set; }
     public string LogoBase64 { get; set; }
+    public List<Branch>? Branches { get; set; }
 }

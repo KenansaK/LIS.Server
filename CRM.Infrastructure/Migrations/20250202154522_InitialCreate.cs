@@ -96,6 +96,49 @@ namespace CRM.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Branches",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    BranchCode = table.Column<string>(type: "text", nullable: false),
+                    BranchName = table.Column<string>(type: "text", nullable: false),
+                    CurrencyCode = table.Column<int>(type: "integer", nullable: false),
+                    ConsolidationQuery = table.Column<string>(type: "text", nullable: false),
+                    VATNumber = table.Column<string>(type: "text", nullable: false),
+                    EORI = table.Column<string>(type: "text", nullable: false),
+                    IOSS = table.Column<string>(type: "text", nullable: false),
+                    LicenseRegistrationNumber = table.Column<string>(type: "text", nullable: false),
+                    GPI = table.Column<string>(type: "text", nullable: false),
+                    ExternalCode = table.Column<string>(type: "text", nullable: false),
+                    BillingExternalCode = table.Column<string>(type: "text", nullable: false),
+                    AllowedCODCurencies = table.Column<int>(type: "integer", nullable: false),
+                    WeightUnit = table.Column<int>(type: "integer", nullable: false),
+                    DimensionUnit = table.Column<int>(type: "integer", nullable: false),
+                    ProductService = table.Column<string>(type: "text", nullable: false),
+                    ProductTypeCode = table.Column<string>(type: "text", nullable: false),
+                    ShipmentService = table.Column<string>(type: "text", nullable: false),
+                    SupplierCode = table.Column<string>(type: "text", nullable: false),
+                    CustomerCode = table.Column<string>(type: "text", nullable: false),
+                    CustomerId = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    StatusId = table.Column<short>(type: "smallint", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Branches", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Branches_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RolePermissions",
                 columns: table => new
                 {
@@ -143,6 +186,53 @@ namespace CRM.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Addresses",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Country = table.Column<int>(type: "integer", nullable: false),
+                    City = table.Column<string>(type: "text", nullable: false),
+                    AddressLine1 = table.Column<string>(type: "text", nullable: false),
+                    AddressLine2 = table.Column<string>(type: "text", nullable: false),
+                    ZipCode = table.Column<string>(type: "text", nullable: false),
+                    LocationCode1 = table.Column<string>(type: "text", nullable: false),
+                    LocationCode2 = table.Column<string>(type: "text", nullable: false),
+                    LocationCode3 = table.Column<string>(type: "text", nullable: false),
+                    FAXNumber = table.Column<string>(type: "text", nullable: false),
+                    ContactName = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Phone = table.Column<string>(type: "text", nullable: false),
+                    BranchId = table.Column<long>(type: "bigint", nullable: false),
+                    BranchCode = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    StatusId = table.Column<short>(type: "smallint", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Addresses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Addresses_Branches_BranchId",
+                        column: x => x.BranchId,
+                        principalTable: "Branches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Addresses_BranchId",
+                table: "Addresses",
+                column: "BranchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Branches_CustomerId",
+                table: "Branches",
+                column: "CustomerId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_RolePermissions_PermissionId",
                 table: "RolePermissions",
@@ -158,13 +248,16 @@ namespace CRM.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Customers");
+                name: "Addresses");
 
             migrationBuilder.DropTable(
                 name: "RolePermissions");
 
             migrationBuilder.DropTable(
                 name: "UserRoles");
+
+            migrationBuilder.DropTable(
+                name: "Branches");
 
             migrationBuilder.DropTable(
                 name: "Permissions");
@@ -174,6 +267,9 @@ namespace CRM.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Customers");
         }
     }
 }

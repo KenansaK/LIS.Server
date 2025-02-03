@@ -24,7 +24,7 @@ public class CustomersController : ControllerBase
     }
     [HttpGet]
     [Permission("every")]
-    public async Task<ActionResult> Get()
+    public async Task<ActionResult> GetAllCustomers()
     {
         return await _mediator.Send(new GetCustomersRequest() { });
     }
@@ -59,7 +59,7 @@ public class CustomersController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult> GetById(int id)
+    public async Task<ActionResult> GetCustomerById(int id)
     {
         var result = await _mediator.Send(new GetCustomerRequest() { Id = id });
         return result;
@@ -73,7 +73,7 @@ public class CustomersController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(int id)
+    public async Task<ActionResult> DeleteCustomer(int id)
     {
         return await _mediator.Send(new DeleteCustomerRequest { Id = id });
     }

@@ -16,6 +16,9 @@ public class CRMDbContext : DbContext
     public DbSet<Permission> Permissions { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
+    public DbSet<Branch> Branches { get; set; }
+    public DbSet<Address> Addresses { get; set; }
+
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
