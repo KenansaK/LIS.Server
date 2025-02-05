@@ -23,6 +23,17 @@ public class CRMDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
+        modelBuilder.Entity<Customer>()
+          .HasMany(c => c.Branches)
+          .WithOne(b => b.Customer)
+          .HasForeignKey(b => b.CustomerId);
+
+        modelBuilder.Entity<Branch>()
+            .HasMany(b => b.Addresses)
+            .WithOne(a => a.Branch)
+            .HasForeignKey(a => a.BranchId);
+
         // Bridge Table User <--> Role
         modelBuilder.Entity<UserRole>()
             .HasKey(ur => new { ur.UserId, ur.RoleId });

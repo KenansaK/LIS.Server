@@ -22,7 +22,6 @@ public static class AddressMapper
                 AddressLine1 = entity.AddressLine1,
                 AddressLine2 = entity.AddressLine2,
                 FAXNumber = entity.FAXNumber,
-                BranchCode = entity.BranchCode,
                 ContactName = entity.ContactName,
                 Email = entity.Email,
                 LocationCode1 = entity.LocationCode1,
@@ -34,7 +33,8 @@ public static class AddressMapper
                 UpdatedBy = entity.UpdatedBy,
                 CreatedAt = entity.CreatedAt,
                 UpdatedAt = entity.UpdatedAt,
-                Status = entity.StatusId
+                Status = entity.StatusId,
+                BranchId = entity.BranchId
 
 
             };
@@ -58,7 +58,6 @@ public static class AddressMapper
                 AddressLine1 = model.AddressLine1,
                 AddressLine2 = model.AddressLine2,
                 FAXNumber = model.FAXNumber,
-                BranchCode = model.BranchCode,
                 ContactName = model.ContactName,
                 Email = model.Email,
                 LocationCode1 = model.LocationCode1,
@@ -67,6 +66,7 @@ public static class AddressMapper
                 Phone = model.Phone,
                 ZipCode = model.ZipCode,
                 StatusId = model.Status,
+                BranchId = model.BranchId,
 
 
 
@@ -94,7 +94,7 @@ public static class AddressMapper
                 AddressLine1 = dto.AddressLine1,
                 AddressLine2 = dto.AddressLine2,
                 FAXNumber = dto.FAXNumber,
-                BranchCode = dto.BranchCode,
+                BranchId = dto.BranchId,
                 ContactName = dto.ContactName,
                 Email = dto.Email,
                 LocationCode1 = dto.LocationCode1,

@@ -27,7 +27,6 @@ public class UpdateAddressRequesttHandler(Dispatcher dispatcher) : IRequestHandl
 
         address.AddressLine1 = request.Model.AddressLine1;
         address.AddressLine2 = request.Model.AddressLine2;
-        address.BranchCode = request.Model.BranchCode;
         address.City = request.Model.City;
         address.ContactName = request.Model.ContactName;
         address.Country = request.Model.Country;

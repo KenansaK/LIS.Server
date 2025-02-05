@@ -25,6 +25,7 @@ public class BranchDto
     public string ShipmentService { get; set; }
     public string SupplierCode { get; set; }
     public string CustomerCode { get; set; }
+    public long CustomerId { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
     public string? CreatedBy { get; set; }

@@ -172,10 +172,6 @@ namespace CRM.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("BranchCode")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<long>("BranchId")
                         .HasColumnType("bigint");
 

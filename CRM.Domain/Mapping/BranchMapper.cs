@@ -40,6 +40,7 @@ public static class BranchMapper
                 CreatedAt = entity.CreatedAt,
                 UpdatedAt = entity.UpdatedAt,
                 CustomerCode = entity.CustomerCode,
+                CustomerId = entity.CustomerId,
                 Status = entity.StatusId
 
 
@@ -78,6 +79,7 @@ public static class BranchMapper
                 ShipmentService = model.ShipmentService,
                 SupplierCode = model.SupplierCode,
                 CustomerCode = model.CustomerCode,
+                CustomerId = model.CustomerId,
                 StatusId = model.Status
 
 
@@ -119,6 +121,7 @@ public static class BranchMapper
                 ShipmentService = dto.ShipmentService,
                 SupplierCode = dto.SupplierCode,
                 CustomerCode = dto.CustomerCode,
+                CustomerId = dto.CustomerId,
 
 
 

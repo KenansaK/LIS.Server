@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CRM.Infrastructure.Migrations
 {
     [DbContext(typeof(CRMDbContext))]
-    [Migration("20250202154522_InitialCreate")]
+    [Migration("20250203092034_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -172,10 +172,6 @@ namespace CRM.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("AddressLine2")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("BranchCode")
                         .IsRequired()
                         .HasColumnType("text");
 

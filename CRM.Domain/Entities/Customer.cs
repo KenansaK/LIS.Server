@@ -4,15 +4,15 @@ using Kernal.Models;
 namespace CRM.Domain.Entities;
 public class Customer : BaseEntity
 {
-    public string CompanyCommercialName { get; set; }
-    public string CompanyLegalName { get; set; }
+    public string CompanyCommercialName { get; set; } = string.Empty;
+    public string CompanyLegalName { get; set; } = string.Empty;
     public BusinessType BusinessType { get; set; }
-    public string CustomerCode { get; set; }
-    public string CustomerNumber { get; set; }
-    public string RegistrationNumber { get; set; }
-    public string BillingExternalCode { get; set; }
-    public string ExternalCode { get; set; }
-    public string StoreBarcodePrefix { get; set; }
-    public string LogoBase64 { get; set; }
-    public List<Branch>? Branches { get; set; }
+    public string CustomerCode { get; set; } = string.Empty;
+    public string CustomerNumber { get; set; } = string.Empty;
+    public string RegistrationNumber { get; set; } = string.Empty;
+    public string BillingExternalCode { get; set; } = string.Empty;
+    public string ExternalCode { get; set; } = string.Empty;
+    public string StoreBarcodePrefix { get; set; } = string.Empty;
+    public string LogoBase64 { get; set; } = string.Empty;
+    public List<Branch> Branches { get; set; } = new List<Branch>();
 }

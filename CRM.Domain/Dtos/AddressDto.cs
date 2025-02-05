@@ -30,6 +30,7 @@ public class AddressDto
 
     public string Phone { get; set; }
     public string BranchCode { get; set; }
+    public long BranchId { get; set; }
     public short Status { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }

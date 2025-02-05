@@ -16,7 +16,7 @@ builder.Services
     .AddAuthenticationAndAuthorization(builder.Configuration)
     .AddCaching(builder.Configuration)
     .AddInfrastructure(builder.Configuration)
-.AddMessageBroker(builder.Configuration)
+    .AddMessageBroker(builder.Configuration)
     .AddSwagger();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddCors(options =>

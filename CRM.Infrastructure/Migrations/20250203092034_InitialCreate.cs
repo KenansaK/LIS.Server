@@ -205,7 +205,6 @@ namespace CRM.Infrastructure.Migrations
                     Email = table.Column<string>(type: "text", nullable: false),
                     Phone = table.Column<string>(type: "text", nullable: false),
                     BranchId = table.Column<long>(type: "bigint", nullable: false),
-                    BranchCode = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     StatusId = table.Column<short>(type: "smallint", nullable: false),

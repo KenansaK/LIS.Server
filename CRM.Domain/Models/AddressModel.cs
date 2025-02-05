@@ -5,7 +5,7 @@ namespace CRM.Domain.Models;
 public class AddressModel
 {
     public long Id { get; set; }
-    public Country Country { get; set; } 
+    public Country Country { get; set; }
 
     public string City { get; set; }
 
@@ -28,8 +28,7 @@ public class AddressModel
     public string Email { get; set; }
 
     public string Phone { get; set; }
-    public long BranchId {  get; set; }
-    public string BranchCode { get; set; }
+    public long BranchId { get; set; }
     public short Status { get; set; }
 
 }

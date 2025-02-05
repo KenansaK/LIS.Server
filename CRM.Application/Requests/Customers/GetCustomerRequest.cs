@@ -1,6 +1,5 @@
 ﻿using CRM.Application.Queries;
 using CRM.Domain.Dtos;
-using CRM.Domain.Entities;
 using Kernal.Helpers;
 using MediatR;
 using SharedKernel;
