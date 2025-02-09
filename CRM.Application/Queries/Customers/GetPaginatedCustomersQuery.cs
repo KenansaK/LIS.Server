@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CRM.Application.Queries.Customers;
 
-public class GetPaginatedCustomersQuery : IRequest<PaginatedCustomersDto>
+public class GetPaginatedCustomersQuery : IQuery<PaginatedCustomersDto>
 {
     public int PageIndex { get; set; } // Default to first page
     public int PageSize { get; set; } // Default page size
@@ -17,7 +17,7 @@ public class GetPaginatedCustomersQuery : IRequest<PaginatedCustomersDto>
     public bool SortAscending { get; set; } = true; // Default sort order
 }
 
-public class GetPaginatedCustomersQueryHandler : IRequestHandler<GetPaginatedCustomersQuery, PaginatedCustomersDto>
+public class GetPaginatedCustomersQueryHandler : IQueryHandler<GetPaginatedCustomersQuery, PaginatedCustomersDto>
 {
     private readonly IRepository<Customer> _repository;
 
@@ -26,17 +26,17 @@ public class GetPaginatedCustomersQueryHandler : IRequestHandler<GetPaginatedCus
         _repository = repository;
     }
 
-    public async Task<PaginatedCustomersDto> Handle(GetPaginatedCustomersQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedCustomersDto> Handle(GetPaginatedCustomersQuery query, CancellationToken cancellationToken)
     {
         // Build the ordering logic dynamically based on the SortColumn and SortAscending values.
-        var orderBy = BuildOrderByExpression(request.SortColumn, request.SortAscending);
+        var orderBy = BuildOrderByExpression(query.SortColumn, query.SortAscending);
 
         var customersQuery = _repository.Query().Where(x => x.StatusId != 3);
 
         // Apply search filtering if provided.
-        if (!string.IsNullOrEmpty(request.SearchTerm))
+        if (!string.IsNullOrEmpty(query.SearchTerm))
         {
-            var searchTerm = request.SearchTerm.ToLower();
+            var searchTerm = query.SearchTerm.ToLower();
             customersQuery = customersQuery.Where(b => EF.Functions.Like(b.CompanyCommercialName.ToLower(), $"%{searchTerm}%"));
         }
 
@@ -45,16 +45,16 @@ public class GetPaginatedCustomersQueryHandler : IRequestHandler<GetPaginatedCus
 
         // Apply ordering, skipping and taking for pagination.
         var paginatedCustomer = await orderBy(customersQuery)
-       .Skip((request.PageIndex - 1) * request.PageSize)
-       .Take(request.PageSize)
+       .Skip((query.PageIndex - 1) * query.PageSize)
+       .Take(query.PageSize)
        .ToListAsync(cancellationToken);
 
         // Map to DTO and return.
         return new PaginatedCustomersDto
         {
             TotalRecords = totalRecords,
-            PageIndex = request.PageIndex,
-            PageSize = request.PageSize,
+            PageIndex = query.PageIndex,
+            PageSize = query.PageSize,
             Customers = paginatedCustomer.ToDtos().ToList() // Assuming `ToDTOs` is an extension method to map entities to DTOs.
         };
     }

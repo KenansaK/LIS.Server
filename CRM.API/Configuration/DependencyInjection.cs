@@ -12,7 +12,6 @@ using CRM.Application.Behaviors;
 using CRM.Infrastructure;
 using Kernal.Chaching;
 using CRM.Infrastructure;
-using CRM.Domain.Auth;
 using Microsoft.AspNetCore.Identity;
 using CRM.Application.Requests;
 using Kernal.Jwt;
@@ -20,7 +19,6 @@ using CRM.Infrastructure.Messaging;
 using Kernal.Helpers;
 using Kernal.Contracts;
 using Persistence.Implementation;
-using CRM.Application.Requests.Access;
 using Kernel.Contract;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -98,7 +96,6 @@ namespace CRM.API.Configuration
 
             services.AddAuthorization();
             services.AddScoped<IJwtService, JwtService>();
-            services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddSingleton<IHttpContext, SharedKernel.HttpContext>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             //services
@@ -120,7 +117,7 @@ namespace CRM.API.Configuration
 
             services.AddValidatorsFromAssemblyContaining<CreateCustomerValidator>();
             services.AddValidatorsFromAssemblyContaining<CreateCustomerRequest>();
-            services.AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
+            //services.AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
 
 
             // Register the validation pipeline behavior
@@ -136,7 +133,7 @@ namespace CRM.API.Configuration
         .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<,>)))
         .AsImplementedInterfaces()
         .WithScopedLifetime());
-            services.AddScoped<IRoleService, RoleService>();
+            //services.AddScoped<IRoleService>();
             return services;
 
         }
@@ -215,7 +212,7 @@ namespace CRM.API.Configuration
                     typeof(CreateCustomerRequest).Assembly // Add other relevant assemblies here
                 );
             });
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<LoginRequest>());
+            // services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<LoginRequest>());
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<AddCustomerCommand>());
             return services;
         }

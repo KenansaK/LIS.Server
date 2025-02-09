@@ -18,7 +18,7 @@ public class GetAddressRequestHandler(Dispatcher dispatcher) : IRequestHandler<G
         var address = await dispatcher.DispatchAsync(new GetAddressQuery { Id = request.Id });
 
         if (address is null)
-            return Result.NotFound("Lcoation Not Found");
+            return Result.NotFound("Address Not Found");
 
         return Result.Success(address.ToDto());
     }

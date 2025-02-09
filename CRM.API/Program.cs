@@ -2,6 +2,7 @@ using CRM.API.Configuration;
 using CRM.Application.Behaviors;
 using CRM.Application.Validators;
 using FluentValidation;
+using Kernal.Interfaces;
 using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);

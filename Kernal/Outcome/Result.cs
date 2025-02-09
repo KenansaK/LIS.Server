@@ -12,7 +12,7 @@ namespace SharedKernel;
 /// <para>This class defines different types of results for an operation.</para>
 /// For example: <c>Result.Invalid</c>, <c>Result.NotFound</c>, among others.
 /// </remarks>
-public  partial class Result : ResultBase
+public partial class Result : ResultBase
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Result"/> class.
@@ -35,7 +35,7 @@ public  partial class Result : ResultBase
         Message = message,
         Status = ResultStatus.Ok
     };
- 
+
 
     /// <summary>
     /// Represents a successful operation.
@@ -68,7 +68,30 @@ public  partial class Result : ResultBase
         Message = message,
         Status = ResultStatus.Created
     };
+    /// <summary>
+    /// Represents a failure operation.
+    /// </summary>
+    /// <param name="message">A message explaining the failure.</param>
 
+
+    /// <summary>
+    /// Represents a failure operation with additional data.
+    /// </summary>
+    /// <param name="data">The data associated with the failure.</param>
+    /// <param name="message">A message explaining the failure.</param>
+    public static Result<T> Failure<T>(T data, string message) => new()
+    {
+        Data = data,
+        IsSuccess = false,
+        Message = message,
+        Status = ResultStatus.Failure
+    };
+    public static Result<T> Failure<T>(string message) => new()
+    {
+        IsSuccess = false,
+        Message = message,
+        Status = ResultStatus.Failure
+    };
     ///// <inheritdoc cref="CreatedResource(int, string)" />
     //public static Result<CreatedId> CreatedResource(int id)
     //    => CreatedResource(id, ResponseMessages.CreatedResource);
@@ -121,7 +144,7 @@ public  partial class Result : ResultBase
     /// <param name="data">The value to be set.</param>
     public static Result<T> ObtainedResource<T>(T data)
         => Success(data, ResponseMessages.ObtainedResource);
-  
+
 
     public static implicit operator ActionResult(Result result)
     {

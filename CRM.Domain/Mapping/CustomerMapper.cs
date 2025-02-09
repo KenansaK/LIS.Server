@@ -1,11 +1,8 @@
 ﻿using CRM.Domain.Dtos;
 using CRM.Domain.Entities;
-using CRM.Domain.Enums;
 using CRM.Domain.Models;
-using System.Reflection;
 
 namespace CRM.Domain.Mapping;
-
 public static class CustomerMapper
 {
     public static IEnumerable<CustomerDto?> ToDtos(this IEnumerable<Customer> entities)

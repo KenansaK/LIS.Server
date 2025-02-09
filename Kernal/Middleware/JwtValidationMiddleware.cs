@@ -1,12 +1,13 @@
-﻿using Kernal.Interfaces;
-using Kernal.Jwt;
+﻿using Kernal.Jwt;
 using Kernal.Middleware;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 
@@ -26,13 +27,11 @@ public class JwtValidationMiddleware
         _jwtOptions = jwtOptions.Value;
     }
 
-    public async Task InvokeAsync(HttpContext context, IRoleService roleService)
+    public async Task InvokeAsync(HttpContext context, IServiceProvider serviceProvider)
     {
-        // Your token validation logic here...
         if (context.GetEndpoint()?.Metadata?.OfType<AllowAnonymousAttribute>().Any() == true)
         {
             await _next(context);
-
             return;
         }
 
@@ -54,11 +53,11 @@ public class JwtValidationMiddleware
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
+                ValidIssuer = _jwtOptions.Issuer,
                 ValidateAudience = true,
+                ValidAudience = _jwtOptions.Audience,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = _jwtOptions.Issuer,
-                ValidAudience = _jwtOptions.Audience,
                 IssuerSigningKey = key
             };
 
@@ -87,16 +86,49 @@ public class JwtValidationMiddleware
             if (!string.IsNullOrEmpty(requiredPermission))
             {
                 var userId = int.Parse(principal.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
-                var userPermissions = await roleService.GetUserPermissionsAsync(userId);
 
+                // Fetch permissions from the API
+                var httpClient = context.RequestServices.GetRequiredService<HttpClient>();
+                var apiUrl = $"https://localhost:7122/api/Permission/permissions/{userId}";
+
+                List<string> userPermissions = new List<string>(); // Initialize to avoid null reference
+                try
+                {
+                    var response = await httpClient.GetAsync(apiUrl);
+                    if (response.StatusCode == HttpStatusCode.NoContent)
+                    {
+                        // If there are no permissions, return an empty list
+                        userPermissions = new List<string>();
+                    }
+                    else
+                    {
+                        response.EnsureSuccessStatusCode(); // Throws an exception if the status code isn't 2xx
+
+                        var jsonResponse = await response.Content.ReadAsStringAsync();
+                        userPermissions = System.Text.Json.JsonSerializer.Deserialize<List<string>>(jsonResponse) ?? new List<string>(); // Default to an empty list if deserialization fails or is null
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error fetching user permissions from API.");
+                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                    await context.Response.WriteAsync("Internal Server Error: Unable to fetch user permissions.");
+                    return;
+                }
+
+                // Check if the user has the required permission
                 if (!userPermissions.Contains(requiredPermission))
                 {
                     _logger.LogWarning("User does not have the required permission.");
-                    context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     await context.Response.WriteAsync("Forbidden: You do not have the required permission.");
                     return;
                 }
             }
+
+
+
+
         }
         catch (Exception ex)
         {
@@ -108,4 +140,8 @@ public class JwtValidationMiddleware
 
         await _next(context);
     }
+
+
+
+
 }

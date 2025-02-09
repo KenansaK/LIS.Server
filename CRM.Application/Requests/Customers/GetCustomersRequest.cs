@@ -17,6 +17,6 @@ public class GetCustomersRequestHandler(Dispatcher _dispatcher) : IRequestHandle
         {
             return Result.Success(Customers.ToDtos());
         }
-        return Result.NotFound("No Orders Found");
+        return Result.NotFound("No Customers Found");
     }
 }

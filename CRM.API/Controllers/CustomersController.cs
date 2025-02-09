@@ -14,8 +14,6 @@ namespace CRM.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[AllowAnonymous]
-
 public class CustomersController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -25,24 +23,27 @@ public class CustomersController : ControllerBase
         _mediator = mediator;
     }
     [HttpGet]
-    //[Permission("every")]
+    [Permission("ViewCustomer")]
     public async Task<ActionResult> GetAllCustomers()
     {
         return await _mediator.Send(new GetCustomersRequest() { });
     }
+
+
     [HttpPost("GetPaginatedCustomers")]
-    public async Task<IActionResult> GetPaginatedCustomers([FromBody] GetPaginatedCustomersQuery query)
+    [Permission("ViewCustomer")]
+    public async Task<ActionResult> GetPaginatedCustomers([FromBody] GetPaginatedCustomersRequest request)
     {
-        if (query.PageIndex < 1 || query.PageSize < 1)
+        if (request.PageIndex < 1 || request.PageSize < 1)
         {
             return BadRequest("PageIndex and PageSize must be greater than 0.");
         }
-
-        var result = await _mediator.Send(query);
-        return Ok(result);
+        return await _mediator.Send(request);
     }
+
+
     [HttpPost]
-    [Permission("every")]
+    [Permission("CreateCustomer")]
     public async Task<ActionResult> CreateCustomer([FromBody] CustomerModel model)
     {
         if (model == null)
@@ -54,39 +55,43 @@ public class CustomersController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Permission("EditCustomer")]
     public async Task<ActionResult> UpdateCustomer(long id, [FromBody] CustomerModel model)
     {
         return await _mediator.Send(new UpdateCustomerRequest { Id = id, Model = model });
     }
 
     [HttpGet("{id}")]
+    [Permission("ViewCustomer")]
     public async Task<ActionResult> GetCustomerById(long id)
     {
         var result = await _mediator.Send(new GetCustomerRequest() { Id = id });
         return result;
     }
 
-    [HttpGet("GetStatusById/{id}")]
-    public async Task<ActionResult> GetStatusById(long id)
-    {
-        var result = await _mediator.Send(new GetCustomerRequest() { Id = id });
-        return result == null ? Result.NotFound() : Result.Success(result.Data.Status.ToString());
-    }
+    //[HttpGet("GetStatusById/{id}")]
+    //public async Task<ActionResult> GetStatusById(long id)
+    //{
+    //    var result = await _mediator.Send(new GetCustomerRequest() { Id = id });
+    //    return result == null ? Result.NotFound() : Result.Success(result.Data.Status.ToString());
+    //}
 
     [HttpDelete("{id}")]
+    [Permission("DeleteCustomer")]
     public async Task<ActionResult> DeleteCustomer(int id)
     {
         return await _mediator.Send(new DeleteCustomerRequest { Id = id });
     }
 
-    [HttpPost("ChangeStatusOrders")]
-    public async Task<ActionResult> ChangeStatusForCustomer([FromBody] ChangeStatusCustomerModel model)
-    {
-        return await _mediator.Send(new ChangeStatusCustomerRequest { Model = model });
-    }
+    //[HttpPost("ChangeStatusOrders")]
+    //public async Task<ActionResult> ChangeStatusForCustomer([FromBody] ChangeStatusCustomerModel model)
+    //{
+    //    return await _mediator.Send(new ChangeStatusCustomerRequest { Model = model });
+    //}
 
     // Get branches by Customer ID
     [HttpGet("{id}/branches")]  // Descriptive route
+    [Permission("ViewBranch")]
     public async Task<ActionResult> GetBranchesByCustomerId(long id)
     {
         var result = await _mediator.Send(new GetBranchByCustomerIdRequest() { Id = id });

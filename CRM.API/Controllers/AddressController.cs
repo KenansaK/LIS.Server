@@ -10,7 +10,6 @@ namespace CRM.API.Controllers
 
     [ApiController]
     [Route("api/[controller]")]
-    [AllowAnonymous]
     public class AddressesController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -21,12 +20,15 @@ namespace CRM.API.Controllers
         }
 
         [HttpGet]
+        [Permission("ViewAddress")]
+
         public async Task<ActionResult> GetAllAddresses()
         {
             return await _mediator.Send(new GetAddressesRequest() { });
         }
 
         [HttpPost]
+        [Permission("CreateAddress")]
         public async Task<ActionResult> CreateAddress([FromBody] AddressModel model)
         {
             if (model == null)
@@ -37,12 +39,14 @@ namespace CRM.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Permission("EditAddress")]
         public async Task<ActionResult> UpdateAddress(int id, [FromBody] AddressModel model)
         {
             return await _mediator.Send(new UpdateAddressRequest { Id = id, Model = model });
         }
 
         [HttpGet("{id}")]
+        [Permission("ViewAddress")]
         public async Task<ActionResult> GetAddressById(int id)
         {
             var result = await _mediator.Send(new GetAddressRequest() { Id = id });
@@ -51,6 +55,7 @@ namespace CRM.API.Controllers
 
 
         [HttpDelete("{id}")]
+        [Permission("DeleteAddress")]
         public async Task<ActionResult> DeleteAddress(int id)
         {
             return await _mediator.Send(new DeleteAddressRequest { Id = id });
