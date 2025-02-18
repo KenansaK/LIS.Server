@@ -1,5 +1,6 @@
 ﻿using Identity.Application.Requests;
 using Identity.Domain.Models;
+using Kernal.Middleware;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +19,7 @@ public class RoleController : ControllerBase
 
     // GET all roles 
     [HttpGet("roles")]
+    [Permission("ViewRole")]
     public async Task<ActionResult> GetAllRoles()
     {
         return await _mediator.Send(new GetRolesRequest());
@@ -25,6 +27,7 @@ public class RoleController : ControllerBase
 
     // POST: create role
     [HttpPost("roles")]
+    [Permission("CreateRole")]
     public async Task<ActionResult> CreateRole([FromBody] RoleModel model)
     {
         if (model == null)
@@ -36,6 +39,7 @@ public class RoleController : ControllerBase
 
     // PUT: update roles
     [HttpPut("roles/{id}")]
+    [Permission("EditRole")]
     public async Task<ActionResult> UpdateRole(long id, [FromBody] RoleModel model)
     {
         if (model == null)
@@ -47,6 +51,7 @@ public class RoleController : ControllerBase
 
     // DELETE role
     [HttpDelete("roles/{id}")]
+    [Permission("DeleteRole")]
     public async Task<ActionResult> DeleteRole(long id)
     {
         return await _mediator.Send(new DeleteRoleRequest { Id = id });

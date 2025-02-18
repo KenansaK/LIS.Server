@@ -1,6 +1,7 @@
 ﻿using Identity.Application.Requests;
 using Identity.Application.Requests.Permissions;
 using Identity.Infrastructure;
+using Kernal.Middleware;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,20 +25,24 @@ public class PermissionController : ControllerBase
     }
 
     // get all permissions 
-    [HttpGet("permissions")]
+    [HttpGet("permissions")] 
+    [Permission("ViewPermission")]
     public async Task<ActionResult> GetAllPermissions()
     {
         return await _mediator.Send(new GetPermissionsRequest());
     }
 
     [HttpGet("permissions/{userId}")]
+    [Permission("ViewPermission")]
     public async Task<ActionResult> GetPermissionsByUserId(long userId)
     {
         var permissionNames = await _mediator.Send(new GetPermissionsByUserIdRequest { UserId = userId });
         return Ok(permissionNames);
     }
+    
 
     [HttpGet("roles/{roleId}/all-permissions")]
+    [Permission("ViewPermission")]
     public async Task<IActionResult> GetAllPermissionsForRole(int roleId)
     {
         // Get all system permissions

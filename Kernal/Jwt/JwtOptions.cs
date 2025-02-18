@@ -11,5 +11,5 @@ public class JwtOptions
     public string Secret { get; set; } = "super-duper-secret-key-that-should-also-be-fairly-long";
     public string Issuer { get; set; } = "Identity";
     public string Audience { get; set; } = "account";
-    public int ExpirationMinutes { get; set; } = 30;
+    public int ExpirationMinutes { get; set; } = 1;
 }

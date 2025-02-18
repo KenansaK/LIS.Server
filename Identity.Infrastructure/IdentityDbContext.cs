@@ -12,6 +12,7 @@ public class IdentityDbContext : DbContext
     public DbSet<Role> Roles { get; set; }
     public DbSet<Permission> Permissions { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 
 
@@ -19,7 +20,7 @@ public class IdentityDbContext : DbContext
     {
 
 
-        // Bridge Table Role <--> Permission
+        // Bridge Table Role < -- > Permission
         modelBuilder.Entity<RolePermission>()
             .HasKey(rp => new { rp.RoleId, rp.PermissionId });
 

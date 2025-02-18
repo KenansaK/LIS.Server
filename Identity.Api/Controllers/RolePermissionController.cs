@@ -1,4 +1,5 @@
 ﻿using Identity.Application.Requests;
+using Kernal.Middleware;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,7 @@ public class RolePermissionController : ControllerBase
 
     // POST: api/authorization/roles/{roleId}/permissions
     [HttpPost("roles/{roleId}/permissions")]
+    [Permission("AssignPermissionToRole")]
     public async Task<ActionResult> AssignPermissionToRole(long roleId, long permissionId)
     {
         return await _mediator.Send(new AssignPermissionToRoleRequest { RoleId = roleId, PermissionId = permissionId });
@@ -24,6 +26,7 @@ public class RolePermissionController : ControllerBase
     // PERMISSIONS
     // Delete: api/authorization/roles/{roleId}/permissions
     [HttpDelete("roles/{roleId}/permissions")]
+    [Permission("DeletePermissionFromRole")]
     public async Task<ActionResult> DeletePermissionTFromRole(long roleId, long permissionId)
     {
         return await _mediator.Send(new DeletePermissionFromRoleRequest { RoleId = roleId, PermissionId = permissionId });
@@ -31,6 +34,7 @@ public class RolePermissionController : ControllerBase
 
     // GET: api/authorization/roles/{roleId}/permissions
     [HttpGet("roles/{roleId}/permissions")]
+    [Permission("ViewPermissionsForRole")]
     public async Task<ActionResult> GetPermissionsForRole(long roleId)
     {
         return await _mediator.Send(new GetPermissionsForRoleRequest { RoleId = roleId });

@@ -89,7 +89,7 @@ public class JwtValidationMiddleware
 
                 // Fetch permissions from the API
                 var httpClient = context.RequestServices.GetRequiredService<HttpClient>();
-                var apiUrl = $"https://localhost:7122/api/Permission/permissions/{userId}";
+                var apiUrl = $"https://localhost:44318/api/Permission/permissions/{userId}";
 
                 List<string> userPermissions = new List<string>(); // Initialize to avoid null reference
                 try

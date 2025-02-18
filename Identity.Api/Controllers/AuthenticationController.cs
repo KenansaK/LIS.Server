@@ -15,18 +15,18 @@ namespace Identity.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [AllowAnonymous]
-public class AuthorizationController : ControllerBase
+public class AuthenticationController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public AuthorizationController(IMediator mediator)
+    public AuthenticationController(IMediator mediator)
     {
         _mediator = mediator;
 
     }
-    [HttpPost("login")]
+    [HttpPost]
     [AllowAnonymous]
-    public async Task<ActionResult> Login(LoginDTO dto)
+    public async Task<ActionResult> Authentication(LoginDTO dto)
     {
         var response = await _mediator.Send(new LoginRequest { LoginDTO = dto });
 
@@ -37,4 +37,18 @@ public class AuthorizationController : ControllerBase
 
         return BadRequest(response); // returns 400 BadRequest if the login fails
     }
+
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<ActionResult> RefreshToken(string refreshToken)
+    {
+        var response = await _mediator.Send(new RefreshTokenRequest { RefreshToken = refreshToken });
+        if (response.Data.IsSuccessful) // assuming there's an IsSuccess property
+        {
+            return Ok(response.Data); // returns 200 OK with the response
+        }
+        return BadRequest(response.Data);
+    }
+    
+    
 }
