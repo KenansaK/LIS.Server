@@ -3,7 +3,6 @@ using Kernal.Caching;
 using Kernal.Interfaces;
 using Microsoft.Extensions.Caching.Distributed;
 
-
 namespace Kernal.Chaching;
 
 public class CacheService : ICacheService
@@ -17,6 +16,7 @@ public class CacheService : ICacheService
         _httpClient = httpClient;
     }
 
+    // Method to set a record in the cache
     public async Task SetRecordAsync<T>(string recordId, T data, TimeSpan? absoluteExpireTime = null, TimeSpan? unusedExpireTime = null)
     {
         var options = new DistributedCacheEntryOptions
@@ -29,62 +29,41 @@ public class CacheService : ICacheService
         await _cache.SetStringAsync(recordId, jsonData, options);
     }
 
-    public async Task<T> GetRecordAsync<T>(string key, string apiUrl)
+    // Generic method to get a record from cache, or from DB if not found
+    public async Task<T> GetRecordAsync<T>(string controllerName,string propertyName, string propertyValue, string baseUrl)
     {
-        CacheQueryOption options = new CacheQueryOption { Name = key };
-        var jsonData = await _cache.GetStringAsync(options.Name);
-        var optionsDes = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        };
+        // string controllerName = typeof(T).Name.Replace("Dto", "").ToLower(); // Example: BranchDto -> branch
+        string cacheKey = $"{controllerName}:{propertyName}:{propertyValue}";
+
+        var jsonData = await _cache.GetStringAsync(cacheKey);
+        var optionsDes = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
         if (jsonData is not null)
-
             return JsonSerializer.Deserialize<T>(jsonData, optionsDes);
-        else
-        {
-
-            return await GetFromOtherAPIs<T>(key, apiUrl);
-
-
-        }
-
-
+    
+        return await GetFromOtherAPIs<T>(controllerName, propertyName, propertyValue, cacheKey, baseUrl);
     }
 
-    public async Task<T> GetFromOtherAPIs<T>(string cachekey, string apiUrl)
+    public async Task<T> GetFromOtherAPIs<T>(string controllerName, string propertyName, object propertyValue, string cacheKey, string baseUrl)
     {
-        // Define the API URL
-        //apiUrl = apiUrl + "/" + cachekey;
         try
         {
-            // Send a GET request to the API
-            HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
+            var url = new Uri($"{baseUrl}/api/{controllerName}/GetFromDB?{propertyName}={propertyValue}");
+            HttpResponseMessage response = await _httpClient.GetAsync(url);
 
-            // Ensure the request was successful
             response.EnsureSuccessStatusCode();
-
-            // Read the response content
             string responseContent = await response.Content.ReadAsStringAsync();
 
-            // Optionally, deserialize the JSON response to a C# object
-            var optionsDes = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
+            var optionsDes = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             var result = JsonSerializer.Deserialize<T>(responseContent, optionsDes);
 
-            // Cache the fetched data
-            await SetRecordAsync(cachekey, result, TimeSpan.FromMinutes(10));
-
-            // Return the data to the caller
+            await SetRecordAsync(cacheKey, result, TimeSpan.FromMinutes(10));
             return result;
         }
-        catch (HttpRequestException ex)
+        catch (HttpRequestException)
         {
-            // Handle errors
             return default;
         }
     }
-
 
 }

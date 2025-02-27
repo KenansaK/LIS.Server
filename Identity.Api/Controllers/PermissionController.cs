@@ -26,14 +26,14 @@ public class PermissionController : ControllerBase
 
     // get all permissions 
     [HttpGet("permissions")] 
-    [Permission("ViewPermission")]
+    [AuthorizePermission("ViewPermission")]
     public async Task<ActionResult> GetAllPermissions()
     {
         return await _mediator.Send(new GetPermissionsRequest());
     }
 
     [HttpGet("permissions/{userId}")]
-    [Permission("ViewPermission")]
+    [AuthorizePermission("ViewPermission")]
     public async Task<ActionResult> GetPermissionsByUserId(long userId)
     {
         var permissionNames = await _mediator.Send(new GetPermissionsByUserIdRequest { UserId = userId });
@@ -42,7 +42,7 @@ public class PermissionController : ControllerBase
     
 
     [HttpGet("roles/{roleId}/all-permissions")]
-    [Permission("ViewPermission")]
+    [AuthorizePermission("ViewPermission")]
     public async Task<IActionResult> GetAllPermissionsForRole(int roleId)
     {
         // Get all system permissions

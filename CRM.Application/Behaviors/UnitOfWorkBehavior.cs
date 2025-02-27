@@ -12,8 +12,8 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 namespace CRM.Application.Behaviors;
 
 public class UnitOfWorkBehavior<TRequest, TResponse>
- : IPipelineBehavior<TRequest, TResponse>
- where TRequest : notnull
+    : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : notnull
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -29,9 +29,9 @@ public class UnitOfWorkBehavior<TRequest, TResponse>
     {
         if (!typeof(TRequest).Name.EndsWith("Request"))
         {
-
             return await next();
         }
+
         using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
         {
             var response = await next();

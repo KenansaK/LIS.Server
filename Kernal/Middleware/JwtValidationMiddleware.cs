@@ -65,23 +65,23 @@ public class JwtValidationMiddleware
             context.User = principal;
 
             var endpoint = context.GetEndpoint();
-            var requiredRoles = endpoint?.Metadata.GetMetadata<AuthorizeAttribute>()?.Roles;
+            // var requiredRoles = endpoint?.Metadata.GetMetadata<AuthorizeAttribute>()?.Roles;
+            //
+            // if (!string.IsNullOrEmpty(requiredRoles))
+            // {
+            //     var userRoles = principal.FindAll(ClaimTypes.Role).Select(c => c.Value).ToList();
+            //     var requiredRolesArray = requiredRoles.Split(',');
+            //
+            //     if (!requiredRolesArray.Any(role => userRoles.Contains(role)))
+            //     {
+            //         _logger.LogWarning("User does not have the required role.");
+            //         context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            //         await context.Response.WriteAsync("Forbidden: You do not have the required role.");
+            //         return;
+            //     }
+            // }
 
-            if (!string.IsNullOrEmpty(requiredRoles))
-            {
-                var userRoles = principal.FindAll(ClaimTypes.Role).Select(c => c.Value).ToList();
-                var requiredRolesArray = requiredRoles.Split(',');
-
-                if (!requiredRolesArray.Any(role => userRoles.Contains(role)))
-                {
-                    _logger.LogWarning("User does not have the required role.");
-                    context.Response.StatusCode = StatusCodes.Status403Forbidden;
-                    await context.Response.WriteAsync("Forbidden: You do not have the required role.");
-                    return;
-                }
-            }
-
-            var requiredPermission = endpoint?.Metadata.GetMetadata<PermissionAttribute>()?.Permission;
+            var requiredPermission = endpoint?.Metadata.GetMetadata<AuthorizePermissionAttribute>()?.Permission;
 
             if (!string.IsNullOrEmpty(requiredPermission))
             {

@@ -61,7 +61,6 @@ namespace CRM.API.Configuration
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = configuration.GetConnectionString("Redis");
-                options.InstanceName = "RedisDemo_";
             });
 
             services.AddMemoryCache();
@@ -144,9 +143,9 @@ namespace CRM.API.Configuration
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Library API",
+                    Title = "CRM API",
                     Version = "V1",
-                    Description = "Library API for Book Management"
+                    Description = "CRM API's for LIS Project"
                 });
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

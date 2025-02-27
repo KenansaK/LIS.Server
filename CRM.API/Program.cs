@@ -1,9 +1,4 @@
 using CRM.API.Configuration;
-using CRM.Application.Behaviors;
-using CRM.Application.Validators;
-using FluentValidation;
-using Kernal.Interfaces;
-using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -38,7 +33,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseHttpsRedirection();
-
 app.UseCors(MyAllowSpecificOrigins); // Ensure this is after UseAuthentication
 app.UseMiddleware<CustomExceptionHandlerMiddleware>();
 app.UseMiddleware<JwtValidationMiddleware>();

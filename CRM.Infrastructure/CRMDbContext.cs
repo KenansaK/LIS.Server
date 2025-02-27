@@ -1,12 +1,13 @@
-﻿using CRM.Domain.Entities;
+﻿using System.Net.NetworkInformation;
+using CRM.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CRM.Infrastructure;
+
 public class CRMDbContext : DbContext
 {
     public CRMDbContext(DbContextOptions<CRMDbContext> options) : base(options)
     {
-
     }
 
     public DbSet<Customer> Customers { get; set; }
@@ -14,14 +15,12 @@ public class CRMDbContext : DbContext
     public DbSet<Address> Addresses { get; set; }
 
 
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-
         modelBuilder.Entity<Customer>()
-          .HasMany(c => c.Branches)
-          .WithOne(b => b.Customer)
-          .HasForeignKey(b => b.CustomerId);
+            .HasMany(c => c.Branches)
+            .WithOne(b => b.Customer)
+            .HasForeignKey(b => b.CustomerId);
 
         modelBuilder.Entity<Branch>()
             .HasMany(b => b.Addresses)
@@ -32,11 +31,5 @@ public class CRMDbContext : DbContext
 
 
         base.OnModelCreating(modelBuilder);
-
-
     }
-
-
 }
-
-

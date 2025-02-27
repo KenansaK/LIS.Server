@@ -134,9 +134,9 @@ namespace Identity.API.Configuration
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Library API",
+                    Title = "Identity API",
                     Version = "V1",
-                    Description = "Library API for Book Management"
+                    Description = "Identity API's for LIS Project"
                 });
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

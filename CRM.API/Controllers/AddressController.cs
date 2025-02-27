@@ -20,7 +20,7 @@ namespace CRM.API.Controllers
         }
 
         [HttpGet]
-        [Permission("ViewAddress")]
+        [AuthorizePermission("ViewAddress")]
 
         public async Task<ActionResult> GetAllAddresses()
         {
@@ -28,25 +28,22 @@ namespace CRM.API.Controllers
         }
 
         [HttpPost]
-        [Permission("CreateAddress")]
+        [AuthorizePermission("CreateAddress")]
         public async Task<ActionResult> CreateAddress([FromBody] AddressModel model)
         {
-            if (model == null)
-            {
-                return BadRequest("Invalid Address data.");
-            }
+         
             return await _mediator.Send(new CreateAddressRequest { Model = model });
         }
 
         [HttpPut("{id}")]
-        [Permission("EditAddress")]
+        [AuthorizePermission("EditAddress")]
         public async Task<ActionResult> UpdateAddress(int id, [FromBody] AddressModel model)
         {
             return await _mediator.Send(new UpdateAddressRequest { Id = id, Model = model });
         }
 
         [HttpGet("{id}")]
-        [Permission("ViewAddress")]
+        [AuthorizePermission("ViewAddress")]
         public async Task<ActionResult> GetAddressById(int id)
         {
             var result = await _mediator.Send(new GetAddressRequest() { Id = id });
@@ -55,11 +52,12 @@ namespace CRM.API.Controllers
 
 
         [HttpDelete("{id}")]
-        [Permission("DeleteAddress")]
+        [AuthorizePermission("DeleteAddress")]
         public async Task<ActionResult> DeleteAddress(int id)
         {
             return await _mediator.Send(new DeleteAddressRequest { Id = id });
         }
     }
+    // kenan : Role: viewer : view customers and view branches and view addreses
 
 }

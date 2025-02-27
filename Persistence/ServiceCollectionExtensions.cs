@@ -7,10 +7,9 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection RegisterPersistence(this IServiceCollection services)
     {
-
         return services
-             .AddTransient(typeof(IRepository<>), typeof(Repository<>))
-             .AddTransient<IUnitOfWork, UnitOfWork>();
+            .AddTransient(typeof(IRepository<>), typeof(Repository<>))
+            .AddTransient<IUnitOfWork, UnitOfWork>();
     }
 }
 

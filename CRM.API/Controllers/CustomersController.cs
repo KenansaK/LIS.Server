@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SharedKernel;
 using System.Security.Permissions;
+using CRM.Application.Queries;
 
 namespace CRM.API.Controllers;
 
@@ -23,7 +24,7 @@ public class CustomersController : ControllerBase
         _mediator = mediator;
     }
     [HttpGet]
-    [Permission("ViewCustomer")]
+    [AuthorizePermission("ViewCustomer")]
     public async Task<ActionResult> GetAllCustomers()
     {
         return await _mediator.Send(new GetCustomersRequest() { });
@@ -31,7 +32,7 @@ public class CustomersController : ControllerBase
 
 
     [HttpPost("GetPaginatedCustomers")]
-    [Permission("ViewCustomer")]
+    [AuthorizePermission("ViewCustomer")]
     public async Task<ActionResult> GetPaginatedCustomers([FromBody] GetPaginatedCustomersRequest request)
     {
         if (request.PageIndex < 1 || request.PageSize < 1)
@@ -43,7 +44,7 @@ public class CustomersController : ControllerBase
 
 
     [HttpPost]
-    [Permission("CreateCustomer")]
+    [AuthorizePermission("CreateCustomer")]
     public async Task<ActionResult> CreateCustomer([FromBody] CustomerModel model)
     {
         if (model == null)
@@ -55,14 +56,14 @@ public class CustomersController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Permission("EditCustomer")]
+    [AuthorizePermission("EditCustomer")]
     public async Task<ActionResult> UpdateCustomer(long id, [FromBody] CustomerModel model)
     {
         return await _mediator.Send(new UpdateCustomerRequest { Id = id, Model = model });
     }
 
     [HttpGet("{id}")]
-    [Permission("ViewCustomer")]
+    [AuthorizePermission("ViewCustomer")]
     public async Task<ActionResult> GetCustomerById(long id)
     {
         var result = await _mediator.Send(new GetCustomerRequest() { Id = id });
@@ -77,7 +78,7 @@ public class CustomersController : ControllerBase
     //}
 
     [HttpDelete("{id}")]
-    [Permission("DeleteCustomer")]
+    [AuthorizePermission("DeleteCustomer")]
     public async Task<ActionResult> DeleteCustomer(int id)
     {
         return await _mediator.Send(new DeleteCustomerRequest { Id = id });
@@ -91,10 +92,10 @@ public class CustomersController : ControllerBase
 
     // Get branches by Customer ID
     [HttpGet("{id}/branches")]  // Descriptive route
-    [Permission("ViewBranch")]
-    public async Task<ActionResult> GetBranchesByCustomerId(long id)
+    [AuthorizePermission("ViewBranch")]
+    public async Task<object> GetBranchesByCustomerId(long id)
     {
-        var result = await _mediator.Send(new GetBranchByCustomerIdRequest() { Id = id });
+        var result = await _mediator.Send(new GetBranchQuery() { Id = id });
         return result;
     }
 }

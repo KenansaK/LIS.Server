@@ -22,14 +22,14 @@ public class UsersController : ControllerBase
 
     // GET: api/users
     [HttpGet]
-    [Permission("ViewUser")]
+    [AuthorizePermission("ViewUser")]
     public async Task<ActionResult> GetAllUsers()
     {
         return await _mediator.Send(new GetUsersRequest());
     }
 
     [HttpPost("GetPaginatedUsers")]
-    [Permission("ViewUser")]
+    [AuthorizePermission("ViewUser")]
     public async Task<ActionResult> GetPaginatedUsers([FromBody] GetPaginatedUsersRequest request)
     {
         if (request.PageIndex < 1 || request.PageSize < 1)
@@ -53,7 +53,7 @@ public class UsersController : ControllerBase
 
     // PUT: api/users/{id}
     [HttpPut("{id}")]
-    [Permission("EditUser")]
+    [AuthorizePermission("EditUser")]
     public async Task<ActionResult> UpdateUser(long id, [FromBody] UserModel model)
     {
         return await _mediator.Send(new UpdateUserRequest { Id = id, Model = model });
@@ -61,7 +61,7 @@ public class UsersController : ControllerBase
 
     // GET: api/users/{id}
     [HttpGet("{id}")]
-    [Permission("ViewUser")]
+    [AuthorizePermission("ViewUser")]
     public async Task<ActionResult> GetUserById(long id)
     {
         var result = await _mediator.Send(new GetUserRequest { Id = id });
@@ -70,7 +70,7 @@ public class UsersController : ControllerBase
 
     // DELETE: api/users/{id}
     [HttpDelete("{id}")]
-    [Permission("DeleteUser")]
+    [AuthorizePermission("DeleteUser")]
     public async Task<ActionResult> DeleteUser(long id)
     {
         return await _mediator.Send(new DeleteUserRequest { Id = id });

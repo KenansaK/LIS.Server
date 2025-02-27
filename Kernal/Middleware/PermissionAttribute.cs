@@ -1,11 +1,11 @@
 ﻿namespace Kernal.Middleware;
 
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-public class PermissionAttribute : Attribute
+public class AuthorizePermissionAttribute : Attribute
 {
     public string Permission { get; }
 
-    public PermissionAttribute(string permission)
+    public AuthorizePermissionAttribute(string permission)
     {
         Permission = permission;
     }
